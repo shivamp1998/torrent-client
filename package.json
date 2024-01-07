@@ -1,0 +1,23 @@
+{
+  "name": "torrent-client",
+  "version": "1.0.0",
+  "type" : "module",
+  "description": "NodeTorrentCLI: A command-line torrent client built in Node.js, enabling users to effortlessly download single files. Simplifying the torrenting process, this tool offers a user-friendly interface for efficient file retrieval via the command line.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/shivamp1998/torrent-client.git"
+  },
+  "author": "Sarvesh Pandey",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shivamp1998/torrent-client/issues"
+  },
+  "homepage": "https://github.com/shivamp1998/torrent-client#readme",
+  "dependencies": {
+    "bencode": "^4.0.0"
+  }
+}
