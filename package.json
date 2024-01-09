@@ -5,7 +5,8 @@
   "description": "NodeTorrentCLI: A command-line torrent client built in Node.js, enabling users to effortlessly download single files. Simplifying the torrenting process, this tool offers a user-friendly interface for efficient file retrieval via the command line.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js" 
   },
   "repository": {
     "type": "git",

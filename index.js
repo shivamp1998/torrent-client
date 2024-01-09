@@ -7,6 +7,7 @@ const file = fs.readFileSync('./TorrentFiles/newspaper.torrent')
 const torrent = bencode.decode(file, 'Uint8Array');
 
 
+
 peers.getPeers(torrent, () => {
     console.log('got peers')
 })  
