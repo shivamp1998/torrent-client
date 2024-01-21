@@ -52,9 +52,7 @@ const parseConnectionResponse = (response) => {
     }
 }
 
-const parseAnnouncementResponse = (response) => {
-    
-}
+
 
 
 export default {
