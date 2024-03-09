@@ -5,10 +5,13 @@ import crypto from 'crypto';
 import bencode from 'bencode';
 import torrentService from './torrentService.js'
 import misc from './misc.js'
+
 const sendMessageUDP = (socket, message, rawUrl, callback = () => {}) => {
     const url = urlParse(rawUrl)
     socket.send(message, 0, message.length, url.port, url.host.split(':')[0], callback)
-    console.log('message sent')
+    socket.on("message", (msg) => {
+        console.log('message is', msg)
+    })
 }
 
 const buildConnRequest = () => {
@@ -60,7 +63,6 @@ export default {
         const socket = dgram.createSocket('udp4');
         sendMessageUDP(socket, buildConnRequest(), torrent.announce.toString('utf-8'));
         socket.on('message', response => {
-            console.log('any response came', responseType(response))
             if(responseType(response) === 'connect') {
                 const connResponse = parseConnectionResponse(response);
                 
