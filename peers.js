@@ -28,7 +28,7 @@ const buildAnnounceRequest = (connId, torrent, port = 6881) => {
     connId.copy(buff, 0);
     buff.writeUInt32BE(1, 8);
     crypto.randomBytes(4).copy(buff, 12);
-    torrentService.infoHash(torrent).copy(buf, 16);
+    torrentService.infoHash(torrent).copy(buff, 16);
     misc.genId().copy(buff, 36);
     Buffer.alloc(8).copy(buff, 56);
     torrentService.size(torrent).copy(buff, 64);
@@ -55,6 +55,30 @@ const parseConnectionResponse = (response) => {
     }
 }
 
+const group = (iterable, groupSize) => {
+    let groups = [];
+    for(let i=0; i<iterable.length; i+=groupSize) {
+        groups.push(iterable.slice(i, i+groupSize));
+    }
+    return groups;
+}
+
+
+const parseAnnouncementResponse = (response) => {
+    return {
+        action: response.readUInt32BE(0),
+        transactionId: response.readUInt32BE(4),
+        leechers: response.readUInt32BE(8),
+        seeders: response.readUInt32BE(12),
+        peers: group(response.slice(20), 6).map(address => {
+          return {
+            ip: address.slice(0, 4).join('.'),
+            port: address.readUInt16BE(4)
+          }
+        })
+      }
+}
+
 
 
 
@@ -63,12 +87,15 @@ export default {
         const socket = dgram.createSocket('udp4');
         sendMessageUDP(socket, buildConnRequest(), torrent.announce.toString('utf-8'));
         socket.on('message', response => {
+            console.log(responseType(response), 'response')
             if(responseType(response) === 'connect') {
                 const connResponse = parseConnectionResponse(response);
-                
+                if(connResponse.transactionId) {
+                    const announcementReq = buildAnnounceRequest(connResponse.connectionId, torrent);
+                    sendMessageUDP(socket, announcementReq, torrent.announce.toString('utf-8'))
+                }
             }else if(responseType(response) === 'announce') {
                 const announceResponse = parseAnnouncementResponse(response);
-                callback(announceResponse.peers)
             }        
         })
         socket.on('error', (error) => {

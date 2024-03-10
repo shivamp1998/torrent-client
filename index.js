@@ -3,11 +3,14 @@ import fs from 'fs';
 import url from 'url';
 import dgram from 'dgram';
 import peers from './peers.js'
-const file = fs.readFileSync('./TorrentFiles/newspaper.torrent')
-const torrent = bencode.decode(file, 'Uint8Array');
+import torrentService from './torrentService.js';
+const torrent = torrentService.open('./TorrentFiles/newspaper.torrent');
+
+console.log(torrentService.size(torrent))
 
 
-
-peers.getPeers(torrent, () => {
-    console.log('got peers')
-})  
+setInterval(() => {    
+    peers.getPeers(torrent, () => {
+        console.log('got peers')
+    })
+}, 1000)
