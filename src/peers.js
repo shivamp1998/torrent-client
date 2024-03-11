@@ -6,11 +6,13 @@ import bencode from 'bencode';
 import torrentService from './torrentService.js'
 import misc from './misc.js'
 
+//reference - https://web.archive.org/web/20170101194115/http://bittorrent.org/beps/bep_0015.html
+
 const sendMessageUDP = (socket, message, rawUrl, callback = () => {}) => {
     const url = urlParse(rawUrl)
     socket.send(message, 0, message.length, url.port, url.host.split(':')[0], callback)
     socket.on("message", (msg) => {
-        console.log('message is', msg)
+        return msg;
     })
 }
 
@@ -83,7 +85,7 @@ const parseAnnouncementResponse = (response) => {
 
 
 export default {
-    getPeers: (torrent, callback) => {
+    getPeers: (torrent,callback) => {
         const socket = dgram.createSocket('udp4');
         sendMessageUDP(socket, buildConnRequest(), torrent.announce.toString('utf-8'));
         socket.on('message', response => {
@@ -96,6 +98,7 @@ export default {
                 }
             }else if(responseType(response) === 'announce') {
                 const announceResponse = parseAnnouncementResponse(response);
+                callback(announceResponse)
             }        
         })
         socket.on('error', (error) => {
