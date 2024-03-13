@@ -98,7 +98,7 @@ export default {
                 }
             }else if(responseType(response) === 'announce') {
                 const announceResponse = parseAnnouncementResponse(response);
-                callback(announceResponse)
+                callback(announceResponse.peers)
             }        
         })
         socket.on('error', (error) => {
