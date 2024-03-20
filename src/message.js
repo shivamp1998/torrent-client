@@ -16,5 +16,10 @@ export const handleHandshake = (torrent) => {
 
 export const buildKeepAlive = () => Buffer.alloc(4);
 
-
+export const buildChoke = () => {
+    const buf = Buffer.alloc(5);
+    buf.writeUInt32BE(1, 0);
+    buf.writeUInt8(0, 4);
+    return buf;
+  };
 
