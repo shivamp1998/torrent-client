@@ -21,5 +21,12 @@ export const buildChoke = () => {
     buf.writeUInt32BE(1, 0);
     buf.writeUInt8(0, 4);
     return buf;
-  };
+};
+
+export const buildUnchoke = () => {
+    const buf = Buffer.alloc(5);
+    buf.writeUInt32BE(1, 0);
+    buf.writeUInt8(1, 4);
+    return buf;
+}
 
